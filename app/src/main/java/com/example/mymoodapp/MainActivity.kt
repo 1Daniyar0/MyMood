@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
 
-                    AlertDialogComponent()
+                    Navigation()
 
                 }
             }
@@ -107,11 +107,58 @@ fun AlertDialogComponent() {
 
 }
 
-
 fun closeApp(){
     val activity: MainActivity = MainActivity()
     activity.finish()
     exitProcess(0)
 }
+
+@Composable
+fun Navigation() {
+    val navController = rememberNavController()
+    NavHost(navController = navController,
+        startDestination = "splash_screen") {
+        composable("splash_screen") {
+            SplashScreen(navController = navController)
+        }
+
+        // Main Screen
+        composable("main_screen") {
+
+        }
+    }
+}
+@Composable
+fun SplashScreen(navController: NavController) {
+    val scale = remember {
+        androidx.compose.animation.core.Animatable(0f)
+    }
+
+    // Animation
+    LaunchedEffect(key1 = true) {
+        scale.animateTo(
+            targetValue = 0.7f,
+            // tween Animation
+            animationSpec = tween(
+                durationMillis = 800,
+                easing = {
+                    OvershootInterpolator(4f).getInterpolation(it)
+                })
+        )
+        // Customize the delay time
+        delay(3000L)
+        navController.navigate("main_screen")
+    }
+
+    // Image
+    Box(contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()) {
+        // Change the logo
+        Image(painter = painterResource(id = R.drawable.ic_launcher_background),
+            contentDescription = "Logo",
+            modifier = Modifier.scale(scale.value))
+    }
+}
+
 
 
