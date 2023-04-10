@@ -49,9 +49,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-
+                    AlertDialogComponent()
                     Navigation()
-
                 }
             }
         }
@@ -124,7 +123,7 @@ fun Navigation() {
 
         // Main Screen
         composable("main_screen") {
-
+                BottomNavBar()
         }
     }
 }
@@ -160,5 +159,26 @@ fun SplashScreen(navController: NavController) {
     }
 }
 
+@Composable
+fun BottomNavBar(){
+    var selectedItem by remember { mutableStateOf(0) }
+    val items = listOf("Home", "Camera", "Statistic", "Awards")
+    val iconsList = listOf(Icons.Filled.Home,Icons.Filled.Person,Icons.Filled.DateRange,Icons.Filled.Star)
 
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Bottom
+    ){
+        BottomNavigation {
+            items.forEachIndexed { index, item ->
+                BottomNavigationItem(
+                    icon = { Icon(iconsList[index], contentDescription = null) },
+                    label = { Text(item) },
+                    selected = selectedItem == index,
+                    onClick = { selectedItem = index }
+                )
+            }
+        }
+    }
+}
 
