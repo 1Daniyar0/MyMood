@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="app_name">MyMoodApp</string>
+    <string name="exit">Выход</string>
+    <string name="sure">Вы уверены?</string>
+</resources>

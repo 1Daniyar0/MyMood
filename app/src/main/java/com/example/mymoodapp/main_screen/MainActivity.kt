@@ -1,6 +1,7 @@
-package com.example.mymoodapp
+package com.example.mymoodapp.main_screen
 
 import android.os.Bundle
+import android.service.autofill.OnClickAction
 import android.view.animation.OvershootInterpolator
 import android.widget.Button
 import android.widget.Toast
@@ -10,6 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.ui.Alignment
@@ -18,7 +20,6 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.mymoodapp.ui.theme.MyMoodAppTheme
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -36,6 +37,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
+import com.example.mymoodapp.R
+import com.example.mymoodapp.achieve_screen.AchieveScreen
+import com.example.mymoodapp.components.DialogComponent
+import com.example.mymoodapp.ui.theme.*
 import kotlin.system.exitProcess
 
 
@@ -43,14 +48,21 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyMoodAppTheme {
+            val isDarkModeValue = isSystemInDarkTheme()
+            val isDarkMode = remember { mutableStateOf(isDarkModeValue) }
 
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    AlertDialogComponent()
+
+            MyMoodAppTheme(
+                darkTheme = isDarkMode.value,
+                textSize = MyMoodSize.Medium,
+                corners = MyMoodCorners.Rounded,
+                paddingSize = MyMoodSize.Medium
+            ) {
+                Surface(color = MyMoodTheme.colors.primaryBackground) {
+
+                    DialogComponent(R.string.exit,R.string.sure)
                     Navigation()
+
                 }
             }
         }
@@ -58,53 +70,6 @@ class MainActivity : ComponentActivity() {
 }
 
 
-@Composable
-fun AlertDialogComponent() {
-
-    val openDialog = remember { mutableStateOf(false) }
-
-    Column() {
-
-        BackHandler() {
-            openDialog.value = true
-        }
-        if (openDialog.value) {
-
-            AlertDialog(
-
-                onDismissRequest = { openDialog.value = false },
-                title = { Text(text = "Выход", color = Color.White) },
-                text = { Text("Вы уверены что хотите выйти?", color = Color.White) },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            openDialog.value = false
-                        }
-                    ) {
-                        Text("Отмена", color = Color.White)
-                    }
-                },
-
-                dismissButton = {
-
-                    TextButton(
-
-                        onClick = {
-                            openDialog.value = false
-                            closeApp()
-                        }
-                    ) {
-                        Text("Выход", color = Color.White)
-                    }
-                },
-                backgroundColor = colorResource(id = androidx.core.R.color.androidx_core_ripple_material_light),
-                contentColor = Color.Black
-            )
-        }
-
-    }
-
-}
 
 fun closeApp(){
     val activity: MainActivity = MainActivity()
@@ -122,9 +87,23 @@ fun Navigation() {
         }
 
         // Main Screen
-        composable("main_screen") {
-                BottomNavBar()
+        composable("BottomNavBar") {
+            BottomNavBar(navController)
         }
+        composable("Home") {
+
+        }
+        composable("Camera") {
+
+        }
+        composable("Statistic") {
+
+        }
+        composable("Awards") {
+            AchieveScreen()
+            BottomNavBar(navController)
+        }
+
     }
 }
 @Composable
@@ -146,7 +125,7 @@ fun SplashScreen(navController: NavController) {
         )
         // Customize the delay time
         delay(3000L)
-        navController.navigate("main_screen")
+        navController.navigate("BottomNavBar")
     }
 
     // Image
@@ -160,8 +139,8 @@ fun SplashScreen(navController: NavController) {
 }
 
 @Composable
-fun BottomNavBar(){
-    var selectedItem by remember { mutableStateOf(0) }
+fun BottomNavBar(navController: NavController){
+    val selectedItem by remember { mutableStateOf(0) }
     val items = listOf("Home", "Camera", "Statistic", "Awards")
     val iconsList = listOf(Icons.Filled.Home,Icons.Filled.Person,Icons.Filled.DateRange,Icons.Filled.Star)
 
@@ -169,13 +148,15 @@ fun BottomNavBar(){
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Bottom
     ){
-        BottomNavigation {
+        BottomNavigation(
+            backgroundColor = MyMoodTheme.colors.tintColor
+        ) {
             items.forEachIndexed { index, item ->
                 BottomNavigationItem(
                     icon = { Icon(iconsList[index], contentDescription = null) },
                     label = { Text(item) },
                     selected = selectedItem == index,
-                    onClick = { selectedItem = index }
+                    onClick = { navController.navigate(item)}
                 )
             }
         }

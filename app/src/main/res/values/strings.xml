@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MyMoodApp</string>
+    <string name="exit">Exit</string>
+    <string name="sure">Are you sure ?</string>
 </resources>
