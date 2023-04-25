@@ -60,8 +60,35 @@ class MainActivity : ComponentActivity() {
             ) {
                 Surface(color = MyMoodTheme.colors.primaryBackground) {
 
+                    val navController = rememberNavController()
+
                     DialogComponent(R.string.exit,R.string.sure)
-                    Navigation()
+
+                    NavHost(navController = navController,
+                        startDestination = "splash_screen") {
+                        composable("splash_screen") {
+                            SplashScreen(navController = navController)
+                        }
+
+                        // Main Screen
+                        composable("BottomNavBar") {
+                            BottomNavBar(navController,0)
+                        }
+                        composable("Home") {
+                            BottomNavBar(navController,0)
+                        }
+                        composable("Camera") {
+                            BottomNavBar(navController,1)
+                        }
+                        composable("Statistic") {
+                            BottomNavBar(navController,2)
+                        }
+                        composable("Awards") {
+                            AchieveScreen()
+                            BottomNavBar(navController,3)
+                        }
+
+                    }
 
                 }
             }
@@ -77,35 +104,6 @@ fun closeApp(){
     exitProcess(0)
 }
 
-@Composable
-fun Navigation() {
-    val navController = rememberNavController()
-    NavHost(navController = navController,
-        startDestination = "splash_screen") {
-        composable("splash_screen") {
-            SplashScreen(navController = navController)
-        }
-
-        // Main Screen
-        composable("BottomNavBar") {
-            BottomNavBar(navController)
-        }
-        composable("Home") {
-
-        }
-        composable("Camera") {
-
-        }
-        composable("Statistic") {
-
-        }
-        composable("Awards") {
-            AchieveScreen()
-            BottomNavBar(navController)
-        }
-
-    }
-}
 @Composable
 fun SplashScreen(navController: NavController) {
     val scale = remember {
@@ -132,15 +130,15 @@ fun SplashScreen(navController: NavController) {
     Box(contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()) {
         // Change the logo
-        Image(painter = painterResource(id = R.drawable.ic_launcher_background),
+        Image(painter = painterResource(id = R.drawable.cup_image_icon),
             contentDescription = "Logo",
             modifier = Modifier.scale(scale.value))
     }
 }
 
 @Composable
-fun BottomNavBar(navController: NavController){
-    val selectedItem by remember { mutableStateOf(0) }
+fun BottomNavBar(navController: NavController, value: Int){
+    val selectedItem by remember { mutableStateOf(value) }
     val items = listOf("Home", "Camera", "Statistic", "Awards")
     val iconsList = listOf(Icons.Filled.Home,Icons.Filled.Person,Icons.Filled.DateRange,Icons.Filled.Star)
 
@@ -149,7 +147,7 @@ fun BottomNavBar(navController: NavController){
         verticalArrangement = Arrangement.Bottom
     ){
         BottomNavigation(
-            backgroundColor = MyMoodTheme.colors.tintColor
+            backgroundColor = MyMoodTheme.colors.primaryBackground
         ) {
             items.forEachIndexed { index, item ->
                 BottomNavigationItem(
