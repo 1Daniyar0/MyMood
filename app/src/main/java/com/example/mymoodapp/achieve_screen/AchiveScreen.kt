@@ -8,12 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.mymoodapp.R
-import com.example.mymoodapp.ui.theme.MyMoodShape
 import com.example.mymoodapp.ui.theme.MyMoodTheme
 
 
@@ -51,7 +48,7 @@ fun AchieveRaw(){
                     painter = painterResource(id = R.drawable.cup_image),
                     contentDescription = "achieve image",
                     modifier = Modifier
-                        .background(Color.White)
+                        .background(MyMoodTheme.colors.primaryBackground)
                         .size(150.dp, 150.dp)
                         .padding(MyMoodTheme.shapes.padding)
                 )
@@ -79,7 +76,7 @@ fun AchieveRaw(){
                     painter = painterResource(id = R.drawable.cup_image),
                     contentDescription = "achieve image",
                     modifier = Modifier
-                        .background(Color.White)
+                        .background(MyMoodTheme.colors.primaryBackground)
                         .size(150.dp, 150.dp)
                         .padding(MyMoodTheme.shapes.padding)
                 )

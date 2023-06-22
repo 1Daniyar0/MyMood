@@ -1,4 +1,4 @@
-package com.example.mymoodapp.main_screen
+package com.example.mymoodapp
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange

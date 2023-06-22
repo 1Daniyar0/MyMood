@@ -1,6 +1,7 @@
 package com.example.mymoodapp.components
 
 import androidx.activity.compose.BackHandler
+import androidx.camera.core.ExperimentalGetImage
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
@@ -12,10 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.R
-import com.example.mymoodapp.main_screen.closeApp
+import com.example.mymoodapp.closeApp
 import com.example.mymoodapp.ui.theme.MyMoodColors
 import com.example.mymoodapp.ui.theme.MyMoodTheme
-
+@ExperimentalGetImage
 @Composable
 fun DialogComponent(title: Int, text: Int) {
 
